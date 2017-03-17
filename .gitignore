@@ -9,5 +9,10 @@ venv
 
 # Resources #
 #############
-
 raw
+scripts
+data
+
+# Help #
+########
+help
