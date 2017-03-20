@@ -31,7 +31,21 @@ csvfile = args["input"]
 outputfile = args["output"]
 rownum = args["fromrow"]
 
-counter = 0
+beneficiaries = []
+
+with open(csvfile, 'rb') as fin_count:
+	reader = csv.reader(fin_count, delimiter=",", lineterminator='\n')
+	for row in reader:
+		
+		beneficiaries.append(row[7])
+
+
+dist_beneficiaries = list(set(beneficiaries))
+
+
+
+counter_a = 0
+counter_l = 0
 
 with open(csvfile, 'rb') as fin, open(outputfile, 'wb') as fout:
 	reader = csv.reader(fin, delimiter=",", lineterminator='\n')
@@ -54,14 +68,14 @@ with open(csvfile, 'rb') as fin, open(outputfile, 'wb') as fout:
 				r = requests.get(PLACES_URL)
 				result_zero = json.loads(r.content)
 				
-				print json.dumps(result_zero)
+				#print json.dumps(result_zero)
 				if result_zero["status"] == "OK" or result_zero["status"] == "ZERO_RESULTS":
 					if len(result_zero["results"]) > 0:
 						address =  result_zero["results"][0]["formatted_address"]
 						GEOCODE_URL = 'https://maps.googleapis.com/maps/api/geocode/json?address='+address+'&key='+API_KEY
 						r2 = requests.get(GEOCODE_URL)
 						result_one = json.loads(r2.content)
-						print json.dumps(result_one)
+						#print json.dumps(result_one)
 						if len(result_one["results"]) > 0:
 							lat_coords = result_one['results'][0]['geometry']['location']['lat']
 							long_coords = result_one['results'][0]['geometry']['location']['lng']
@@ -76,18 +90,24 @@ with open(csvfile, 'rb') as fin, open(outputfile, 'wb') as fout:
 									#address = i["formatted_address"]
 						#writer.writerow(row[:11] + ["First", uniencoder(county), uniencoder(city_name), uniencoder(postal_code), uniencoder(address), lat_coords, long_coords])
 						writer.writerow(row[:11] + ["First", uniencoder(county), uniencoder(city_name), uniencoder(postal_code), lat_coords, long_coords])
-						print county
-						print city_name
-						print postal_code
+						#print county
+						#print city_name
+						#print postal_code
 						#print address
-						print lat_coords
-						print long_coords
+						#print lat_coords
+						#print long_coords
 					else:
 						writer.writerow(row)
-					counter += 1
+					counter_a += 1
+					counter_l += 1
 				else:
-					if counter >= 1:
+					if counter_l >= 1:
 						writer.writerow(row)
-						counter = 0
+						counter_l = 0
 					else:
 						break
+			print counter_a
+
+
+		else:
+			pass
