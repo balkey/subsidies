@@ -36,7 +36,6 @@ beneficiaries = []
 with open(csvfile, 'rb') as fin_count:
 	reader = csv.reader(fin_count, delimiter=",", lineterminator='\n')
 	for row in reader:
-		
 		beneficiaries.append(row[7])
 
 

@@ -47,7 +47,7 @@ def uniencoder(foo):
 	return boo
 
 API_KEY = ["AIzaSyB6x36wpibEnXKP8EoKu50vniEO3dEcNDo", "AIzaSyAXt42jURuoixnkHuoRHI7G-8gBznqMjkM", "AIzaSyDVctzdm79NIz3e0C1nEdrczNCYbi5Z4CE"]
-rounds = 0
+rounds = 2
 
 # USAGE LIKE: python geocode.py -i ../raw/clean_polski.csv -o ../raw/geocoded_polski.csv -r 2712
 ap = argparse.ArgumentParser()
@@ -86,7 +86,7 @@ for company in beneficiaries:
 		PLACES_URL = "https://maps.googleapis.com/maps/api/place/textsearch/json?query="+company+" "+country+"&key="+API_KEY[rounds]
 		r = requests.get(PLACES_URL)
 		result_zero = json.loads(r.content)
-		#print json.dumps(result_zero)
+		print json.dumps(result_zero)
 		if result_zero["status"] == "OK" or result_zero["status"] == "ZERO_RESULTS":
 			if len(result_zero["results"]) > 0:
 				geocode_address(result_zero)
