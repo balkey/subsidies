@@ -28,16 +28,22 @@ csv.register_dialect(
 csvfile = args["input"]
 
 beneficiaries = []
+empty_counter = 0
 
 with open(csvfile, 'rb') as fin:
 	reader = csv.reader(fin, delimiter=",", lineterminator='\n')
 	counter = 0
 	for row in reader:
 		counter +=1
-		beneficiaries.append(row[7])
+		if row[14]:
+			beneficiaries.append(row[14])
+		else:
+			empty_counter += 1
+
 
 
 dist_beneficiaries = list(set(beneficiaries))
 
 print len(dist_beneficiaries)
+print empty_counter
 print counter
