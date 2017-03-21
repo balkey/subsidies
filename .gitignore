@@ -15,3 +15,8 @@ data
 # Help #
 ########
 help
+
+# DB #
+######
+
+*.sqlite
