@@ -11,7 +11,7 @@ import argparse
 
 from sqlitedict import SqliteDict
 
-mydict = SqliteDict('./my_db.sqlite', autocommit=True)
+#mydict = SqliteDict('./my_db.sqlite', autocommit=True)
 
 def geocode_address(results):
 	county = "N/A"
