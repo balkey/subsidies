@@ -11,7 +11,6 @@ import argparse
 
 from sqlitedict import SqliteDict
 
-mydict = SqliteDict('./my_db.sqlite', autocommit=True)
-
-
-print len(mydict.keys())
+with SqliteDict('./my_db.sqlite') as mydict:
+	mydict.commit()
+	print len(mydict.keys())
