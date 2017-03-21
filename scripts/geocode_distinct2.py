@@ -46,7 +46,7 @@ def uniencoder(foo):
 		boo = unicode(foo).encode('utf8')
 	return boo
 
-API_KEY = ["AIzaSyB6x36wpibEnXKP8EoKu50vniEO3dEcNDo", "AIzaSyAXt42jURuoixnkHuoRHI7G-8gBznqMjkM", "AIzaSyDVctzdm79NIz3e0C1nEdrczNCYbi5Z4CE"]
+API_KEY = ["AIzaSyDx1WWoZ_EFFjvwm1e_9r3RZR7TvcO_ZRg", "AIzaSyC8salCXGA2y_eIxckegG-M17VrP162S3M", "AIzaSyA5p_Yf17uFvK7cwRQNES0jM-b2Qvgz15k", "AIzaSyB6x36wpibEnXKP8EoKu50vniEO3dEcNDo", "AIzaSyAXt42jURuoixnkHuoRHI7G-8gBznqMjkM", "AIzaSyDVctzdm79NIz3e0C1nEdrczNCYbi5Z4CE"]
 rounds = 0
 
 # USAGE LIKE: python geocode.py -i ../raw/clean_polski.csv -o ../raw/geocoded_polski.csv -r 2712
@@ -86,12 +86,13 @@ with SqliteDict('./my_db.sqlite') as mydict:
 			PLACES_URL = "https://maps.googleapis.com/maps/api/place/textsearch/json?query="+company+" "+country+"&key="+API_KEY[rounds]
 			r = requests.get(PLACES_URL)
 			result_zero = json.loads(r.content)
-			print json.dumps(result_zero)
+			#print json.dumps(result_zero)
 			if result_zero["status"] == "OK" or result_zero["status"] == "ZERO_RESULTS":
 				if len(result_zero["results"]) > 0:
 					geocode_address(result_zero)
 					counter_a += 1
 					counter_l += 1
+					mydict.commit()
 					#writer.writerow(row[:11] + ["First", uniencoder(county), uniencoder(city_name), uniencoder(postal_code), lat_coords, long_coords])
 					#print county
 					#print city_name
@@ -108,6 +109,7 @@ with SqliteDict('./my_db.sqlite') as mydict:
 							geocode_address(result_zero_v)
 							counter_a += 1
 							counter_l += 1
+							mydict.commit()
 							break
 						if beneficiaries[company]["variations"].index(i) == len(beneficiaries[company]["variations"]) - 1:
 							for i in beneficiaries[company]["variations"]:
@@ -118,6 +120,7 @@ with SqliteDict('./my_db.sqlite') as mydict:
 									geocode_address(result_zero_v2)
 									counter_a += 1
 									counter_l += 1
+									mydict.commit()
 									break
 								if beneficiaries[company]["variations"].index(i) == len(beneficiaries[company]["variations"]) - 1:
 									county = "N/A"
@@ -129,6 +132,7 @@ with SqliteDict('./my_db.sqlite') as mydict:
 									mydict[company] = ["First", uniencoder(county), uniencoder(city_name), uniencoder(postal_code), uniencoder(address), lat_coords, long_coords]
 									counter_a += 1
 									counter_l += 1
+									mydict.commit()
 						
 			else:
 				if counter_l >= 1:
@@ -140,10 +144,11 @@ with SqliteDict('./my_db.sqlite') as mydict:
 					long_coords = "N/A"
 					mydict[company] = ["First", uniencoder(county), uniencoder(city_name), uniencoder(postal_code), uniencoder(address), lat_coords, long_coords]
 					counter_l = 0
+					mydict.commit()
 				else:
-					if rounds < 2:
+					if rounds < 5:
 						rounds += 1
 					else:
+						mydict.commit()
 						break
 			print counter_a
-			mydict.commit()

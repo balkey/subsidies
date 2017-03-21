@@ -11,8 +11,8 @@ import argparse
 
 from sqlitedict import SqliteDict
 
-with open('database_export.txt', 'r') as outfile:
-    data = json.load(outfile)
+with open('database_export.json', 'r') as outfile:
+    data = json.loads(outfile)
 
 with SqliteDict('./my_db.sqlite') as mydict:
 	for key in data:

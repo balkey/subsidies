@@ -17,5 +17,5 @@ with SqliteDict('./my_db.sqlite') as mydict:
 	for key in mydict:
 		export_json[key] = mydict[key]
 
-with open('database_export.txt', 'w') as outfile:
+with open('database_export.json', 'w') as outfile:
     json.dump(export_json, outfile)
