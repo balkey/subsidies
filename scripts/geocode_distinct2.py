@@ -79,9 +79,11 @@ for ids in beneficiaries:
 
 counter_a = 0
 counter_l = 0
+counter_err = 0
 
 with SqliteDict('./my_db.sqlite') as mydict:
 	for company in beneficiaries:
+		counter_err += 1
 		if company not in mydict.keys():
 			PLACES_URL = "https://maps.googleapis.com/maps/api/place/textsearch/json?query="+company+" "+country+"&key="+API_KEY[rounds]
 			r = requests.get(PLACES_URL)
@@ -152,3 +154,5 @@ with SqliteDict('./my_db.sqlite') as mydict:
 						mydict.commit()
 						break
 			print counter_a
+		else:
+			print counter_err, "working"
